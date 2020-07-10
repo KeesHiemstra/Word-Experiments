@@ -10,8 +10,8 @@ namespace FindReadWords
   {
     public static DateTime Time = DateTime.Now;
     public static List<string> WordList = new List<string>();
-    public static string RandomWord = "PZLIEEGN".ToLower();
-    public static Dictionary<string, int> FoundWords = new Dictionary<string, int>();
+    public static string RandomWord = "PZLAEEGN".ToLower();
+    public static List<string> FoundWords = new List<string>();
 
     static void Main(string[] args)
     {
@@ -20,14 +20,14 @@ namespace FindReadWords
       SearchWords();
 
       int count = 0;
-      foreach (var word in FoundWords.OrderByDescending(x => x.Key.Length))
+      foreach (var word in FoundWords.OrderByDescending(x => x.Length))
       {
         count++;
         if (count > 5)
         {
           break;
         }
-        Console.WriteLine($"{word.Key}\t{word.Key.Length}");
+        Console.WriteLine($"{word}\t{word.Length}");
       }
       Console.WriteLine($"\nFound {FoundWords.Count} words");
 
@@ -76,20 +76,21 @@ namespace FindReadWords
     {
       foreach (string found in WordList.Where(x => x.Contains(search)))
       {
-        if (!FoundWords.ContainsKey(found))
+        if (!FoundWords.Contains(found))
         {
           if (DoesLetterExist(found) && MatchWord(found))
           {
-            FoundWords.Add(found, 1);
+            FoundWords.Add(found);
           }
-        }
-        else
-        {
-          FoundWords[found]++;
         }
       }
     }
 
+    /// <summary>
+    /// Contains the word the letters?
+    /// </summary>
+    /// <param name="word"></param>
+    /// <returns></returns>
     private static bool DoesLetterExist(string word)
     {
       bool add = true;
@@ -101,6 +102,11 @@ namespace FindReadWords
       return add;
     }
 
+    /// <summary>
+    /// Match the word the letters?
+    /// </summary>
+    /// <param name="word"></param>
+    /// <returns></returns>
     private static bool MatchWord(string word)
     {
       bool add = true;
